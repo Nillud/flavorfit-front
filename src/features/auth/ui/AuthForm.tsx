@@ -1,14 +1,21 @@
 'use client'
 
+import { isEmailRegex } from '../utils/is-email.regex'
+import { AuthChangeTypeForm } from './AuthChangeTypeForm'
 import { useMutation } from '@apollo/client/react'
-import Link from 'next/link'
+import cn from 'clsx'
+import Image from 'next/image'
+import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 
-import { PAGES } from '@/shared/config/page.config'
-
-import { LoginDocument, RegisterDocument } from '@/__generated__/graphql'
+import {
+  type AuthInput,
+  LoginDocument,
+  RegisterDocument
+} from '@/__generated__/graphql'
 
 interface Props {
   type: 'login' | 'register'
@@ -16,74 +23,116 @@ interface Props {
 
 export function AuthForm({ type }: Props) {
   const isLogin = type === 'login'
-  const [register, { data, loading, error }] = useMutation(
-    isLogin ? LoginDocument : RegisterDocument
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid }
+  } = useForm<AuthInput>({
+    mode: 'onChange',
+    defaultValues: {
+      email: '',
+      password: ''
+    }
+  })
+
+  const [auth, { loading }] = useMutation(
+    isLogin ? LoginDocument : RegisterDocument,
+    {
+      onCompleted: () => {
+        toast.success(
+          isLogin ? 'Logged in successfully' : 'Registered successfully',
+          { id: 'auth-success' }
+        )
+      },
+      onError: error => {
+        toast.error(error.message, {
+          id: 'auth-error'
+        })
+      }
+    }
   )
 
-  // register({
-  //   variables: {
-  //     data: {
-  //       email: '',
-  //       password: ''
-  //     }
-  //   }
-  // })
+  const handleAuth = (data: AuthInput) => {
+    auth({
+      variables: {
+        data
+      }
+    })
+  }
 
   return (
     <div className="flex h-screen">
-      <div className="m-auto w-sm rounded-lg bg-linear-to-tr from-[#8062ee] to-[#a088fc] p-5 text-white shadow-lg">
-        <h1 className="mb-5 text-center text-4xl font-bold">
-          {isLogin ? 'Login' : 'Register'}
+      <div className="relative m-auto w-sm rounded-lg bg-linear-to-tr from-[#8062ee] to-[#a088fc] p-10 text-white shadow-lg">
+        <h1 className="mb-5 text-center text-[2.3rem] font-bold">
+          {isLogin ? 'Sign In' : 'Sign Up'}
         </h1>
 
-        <form className="space-y-3">
+        <form
+          className="space-y-3"
+          onSubmit={handleSubmit(handleAuth)}
+        >
           <Input
+            {...register('email', {
+              required: true,
+              pattern: {
+                value: isEmailRegex,
+                message: 'Invalid email address'
+              }
+            })}
             type="email"
-            name="email"
-            placeholder="Email"
-            required
+            placeholder="Enter email"
+            aria-invalid={!!errors.email}
+            // className={errors.email ? 'mb-0' : ''}
           />
+
+          {errors.email && (
+            <p className="text-destructive -mt-3 block text-xs">
+              {errors.email.message}
+            </p>
+          )}
 
           <Input
+            {...register('password', {
+              required: true,
+              minLength: {
+                value: 6,
+                message: 'Password must be at least 6 characters'
+              }
+            })}
             type="password"
-            name="password"
-            placeholder="password"
-            required
+            placeholder="Enter password"
+            aria-invalid={!!errors.password}
+            // className={errors.email ? 'mb-0' : ''}
           />
 
-          <div className='text-center'>
+          {errors.password && (
+            <p className="text-destructive -mt-3 block text-xs">
+              {errors.password.message}
+            </p>
+          )}
+
+          <div className="text-center">
             <Button
               type="submit"
-              disabled={loading}
+              variant="secondary"
+              disabled={!isValid || loading}
             >
               {isLogin ? 'Login' : 'Register'}
             </Button>
           </div>
         </form>
 
-        <div className='mt-3 text-center'>
-          {isLogin ? (
-            <div>
-              Don&apos;t have an account?{' '}
-              <Link
-                className="underline"
-                href={PAGES.REGISTER}
-              >
-                Register
-              </Link>
-            </div>
-          ) : (
-            <div>
-              Already have an account?{' '}
-              <Link
-                className="underline"
-                href={PAGES.LOGIN}
-              >
-                Login
-              </Link>
-            </div>
-          )}
-        </div>
+        <AuthChangeTypeForm isLogin={isLogin} />
+
+        <Image
+          src={'/images/emotions/salad.png'}
+          alt="Salad"
+          width={200}
+          height={200}
+          className="absolute -left-16 -bottom-16 -rotate-12"
+          draggable={false}
+        />
       </div>
     </div>
   )
