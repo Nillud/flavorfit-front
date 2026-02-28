@@ -3,15 +3,20 @@
 import { Bell, Headset } from 'lucide-react'
 import Link from 'next/link'
 
+import { useAuth } from '@/features/auth/hooks/useAuth'
+
 import { NavMenu } from '@/shared/components/custom-ui/nav-menu/NavMenu'
 import { UserInfo } from '@/shared/components/custom-ui/nav-menu/UserInfo'
 import { Button } from '@/shared/components/ui/button'
 
 import { PAGES } from '@/shared/config/page.config'
 
+import { Logout } from '../../auth/ui/Logout'
 import { navMenuItems } from './nav.data'
 
 export function Header() {
+  const { user } = useAuth()
+
   return (
     <header className="flex items-center justify-between p-5">
       <div className="flex items-center gap-8">
@@ -36,15 +41,17 @@ export function Header() {
         <Button
           variant={'soft'}
           size={'icon'}
-          className="mr-6 rounded-full"
+          className="mr-2 rounded-full"
         >
           <Bell className="size-5" />
         </Button>
 
+        <Logout />
+
         <UserInfo
           avatarUrl={'https://avatars.githubusercontent.com/u/5?v=4'}
-          name="Jessica"
-          email="jesshamm@gmail.com"
+          name="Anonymous"
+          email={user?.email || ''}
         />
       </div>
     </header>

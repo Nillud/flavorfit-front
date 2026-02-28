@@ -1,39 +1,41 @@
-import { ApolloClient } from "@apollo/client";
-import { httpLink } from "./links/apollo-http.link";
-import { InMemoryCache } from "@apollo/client";
-import { ApolloLink } from "@apollo/client";
-import { IS_CLIENT } from "@/shared/constants/app.constants";
+import { IS_CLIENT } from '@/shared/constants/app.constants'
+import { ApolloClient } from '@apollo/client'
+import { InMemoryCache } from '@apollo/client'
+import { ApolloLink } from '@apollo/client'
+
+import { errorLink } from './links/apollo-error.link'
+import { httpLink } from './links/apollo-http.link'
 
 const clientApolloClient = new ApolloClient({
-  link: ApolloLink.from([httpLink]),
+  link: ApolloLink.from([errorLink, httpLink]),
   cache: new InMemoryCache(),
   devtools: {
-    enabled: true,
-  },
-});
+    enabled: true
+  }
+})
 
 export const simpleApolloClient = new ApolloClient({
   link: httpLink,
   cache: new InMemoryCache(),
   devtools: {
-    enabled: true,
-  },
-});
+    enabled: true
+  }
+})
 
 const serverApolloClient = new ApolloClient({
   link: ApolloLink.from([httpLink]),
   cache: new InMemoryCache(),
   devtools: {
-    enabled: true,
+    enabled: true
   },
   ssrMode: true,
   defaultOptions: {
     query: {
-      fetchPolicy: "no-cache",
-    },
-  },
-});
+      fetchPolicy: 'no-cache'
+    }
+  }
+})
 
 export function getApolloClient() {
-  return IS_CLIENT ? clientApolloClient : serverApolloClient;
+  return IS_CLIENT ? clientApolloClient : serverApolloClient
 }

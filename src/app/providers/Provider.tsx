@@ -13,7 +13,10 @@ export function Provider({ children }: PropsWithChildren) {
     <ApolloProvider client={apollo}>
       {children}
 
-      <Toaster position="top-center" />
+      <Toaster
+        position="top-center"
+        containerClassName="mt-16 font-mono text-sm"
+      />
     </ApolloProvider>
   )
 }

@@ -1,21 +1,30 @@
 'use client'
 
-import { isEmailRegex } from '../utils/is-email.regex'
-import { AuthChangeTypeForm } from './AuthChangeTypeForm'
-import { useMutation } from '@apollo/client/react'
+import { useApolloClient, useMutation } from '@apollo/client/react'
 import cn from 'clsx'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 
+import { PAGES } from '@/shared/config/page.config'
+
 import {
   type AuthInput,
   LoginDocument,
-  RegisterDocument
+  type LoginMutation,
+  type LoginMutationVariables,
+  MeDocument,
+  RegisterDocument,
+  type RegisterMutation,
+  type RegisterMutationVariables
 } from '@/__generated__/graphql'
+
+import { isEmailRegex } from '../utils/is-email.regex'
+import { AuthChangeTypeForm } from './AuthChangeTypeForm'
 
 interface Props {
   type: 'login' | 'register'
@@ -36,22 +45,36 @@ export function AuthForm({ type }: Props) {
     }
   })
 
-  const [auth, { loading }] = useMutation(
-    isLogin ? LoginDocument : RegisterDocument,
-    {
-      onCompleted: () => {
-        toast.success(
-          isLogin ? 'Logged in successfully' : 'Registered successfully',
-          { id: 'auth-success' }
-        )
-      },
-      onError: error => {
-        toast.error(error.message, {
-          id: 'auth-error'
-        })
-      }
+  const client = useApolloClient()
+  const router = useRouter()
+
+  const [auth, { loading }] = useMutation<
+    LoginMutation | RegisterMutation,
+    LoginMutationVariables | RegisterMutationVariables
+  >(isLogin ? LoginDocument : RegisterDocument, {
+    onCompleted: data => {
+      const authData = 'login' in data ? data.login : data.register
+
+      client.writeQuery({
+        query: MeDocument,
+        data: {
+          me: authData.user
+        }
+      })
+
+      toast.success(
+        isLogin ? 'Logged in successfully' : 'Registered successfully',
+        { id: 'auth-success' }
+      )
+
+      router.replace(PAGES.DASHBOARD)
+    },
+    onError: error => {
+      toast.error(error.message, {
+        id: 'auth-error'
+      })
     }
-  )
+  })
 
   const handleAuth = (data: AuthInput) => {
     auth({
@@ -130,7 +153,7 @@ export function AuthForm({ type }: Props) {
           alt="Salad"
           width={200}
           height={200}
-          className="absolute -left-16 -bottom-16 -rotate-12"
+          className="absolute -bottom-16 -left-16 -rotate-12"
           draggable={false}
         />
       </div>
