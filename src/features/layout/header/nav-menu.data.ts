@@ -3,6 +3,7 @@ import {
   Calendar,
   ChartColumn,
   House,
+  Settings,
   Store,
   Users,
   Utensils
@@ -44,8 +45,8 @@ export const navMenuItems: IMenuItem[] = [
     href: PAGES.RECIPES
   },
   {
-    icon: Users,
-    label: 'Forum',
-    href: PAGES.FORUM
+    icon: Settings,
+    label: 'Profile',
+    href: PAGES.PROFILE
   }
 ]
