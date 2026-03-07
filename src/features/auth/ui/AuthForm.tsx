@@ -1,9 +1,11 @@
 'use client'
 
 import { useApolloClient, useMutation } from '@apollo/client/react'
+import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile'
 import cn from 'clsx'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
@@ -45,6 +47,9 @@ export function AuthForm({ type }: Props) {
     }
   })
 
+  const ref = useRef<TurnstileInstance | null>(null)
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+
   const client = useApolloClient()
   const router = useRouter()
 
@@ -73,13 +78,26 @@ export function AuthForm({ type }: Props) {
       toast.error(error.message, {
         id: 'auth-error'
       })
+      ref.current?.reset()
     }
   })
 
   const handleAuth = (data: AuthInput) => {
+    if (!captchaToken) {
+      toast.error('Please complete the CAPTCHA challenge', {
+        id: 'captcha-error'
+      })
+      return
+    }
+
     auth({
       variables: {
         data
+      },
+      context: {
+        headers: {
+          'cf-turnstile-token': captchaToken
+        }
       }
     })
   }
@@ -134,6 +152,18 @@ export function AuthForm({ type }: Props) {
               {errors.password.message}
             </p>
           )}
+
+          <div className="flex scale-85 justify-center pt-2">
+            <Turnstile
+              ref={ref}
+              siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+              onSuccess={token => setCaptchaToken(token)}
+              onExpire={() => setCaptchaToken(null)}
+              options={{
+                theme: 'light'
+              }}
+            />
+          </div>
 
           <div className="text-center">
             <Button
