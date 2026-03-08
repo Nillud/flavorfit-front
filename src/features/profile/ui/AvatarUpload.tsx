@@ -32,6 +32,7 @@ export function AvatarUpload({ value, onChange }: Props) {
 
     setLoading(false)
   }
+
   return (
     <div className="flex items-center gap-3">
       <Image
@@ -39,7 +40,7 @@ export function AvatarUpload({ value, onChange }: Props) {
         width={48}
         height={48}
         alt="avatar"
-        className="rounded-full object-cover border"
+        className="h-12 w-12 rounded-full border object-cover"
       />
 
       <label>

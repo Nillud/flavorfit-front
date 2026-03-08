@@ -1,111 +1,39 @@
 'use client'
 
-import { useMutation, useQuery } from '@apollo/client/react'
-import { User } from 'lucide-react'
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
+import { useQuery } from '@apollo/client/react'
 
-import { Button } from '@/shared/components/ui/button'
-import { HeadingWithIcon } from '@/shared/components/ui/heading-with-icon/HeadingWithIcon'
+import { SkeletonLoader } from '@/shared/components/custom-ui/SkeletonLoader'
 
-import {
-  GetProfileDocument,
-  UpdateProfileDocument
-} from '@/__generated__/graphql'
+import { GetProfileDocument } from '@/__generated__/graphql'
 
-import { IProfileForm } from '../types/profile-update.types'
-import { BodyMeasurementsForm } from './BodyMeasurementsForm'
-import { GeneralInformationForm } from './GeneralInformationForm'
+import { ProfileForm } from './ProfileForm'
 
 export function Profile() {
-  const { data } = useQuery(GetProfileDocument)
+  const { data, loading } = useQuery(GetProfileDocument)
 
-  const form = useForm<IProfileForm>({
-    mode: 'onChange'
-  })
+  if (loading || !data?.me) {
+    return (
+      <div className='space-y-6 rounded-xl bg-white p-5'>
+        <div className="flex items-center justify-between mb-6">
+          <SkeletonLoader count={1} className='w-xs' />
 
-  useEffect(() => {
-    if (!data?.me) return
+          <div className='flex items-center gap-2'>
+            <SkeletonLoader count={2} className='w-32 mb-0' />
+          </div>
+        </div>
 
-    form.reset({
-      fullName: data.me.profile?.fullName || '',
-      email: data.me.email || '',
-      age: data.me.profile?.age || undefined,
-      bio: data.me.profile?.bio || undefined,
-      avatarUrl: data.me.avatarUrl || '',
-      heightCm: data.me.measurement?.heightCm || undefined,
-      weightKg: data.me.measurement?.weightKg || undefined,
-      goalWeightKg: data.me.measurement?.goalWeightKg || undefined,
-      chestCm: data.me.measurement?.chestCm || undefined,
-      waistCm: data.me.measurement?.waistCm || undefined,
-      thighCm: data.me.measurement?.thighCm || undefined,
-      armCm: data.me.measurement?.armCm || undefined,
-      activityLevel: data.me.measurement?.activityLevel || undefined,
-      nutritionGoal: data.me.measurement?.nutritionGoal || undefined
-    })
-  }, [data, form])
+        <div className="grid grid-cols-2 gap-8">
+          <div>
+            <SkeletonLoader count={4} className='mb-4' />
+          </div>
 
-  const [updateProfile, { loading }] = useMutation(UpdateProfileDocument, {
-    onCompleted: () => {
-      toast.success('Profile updated')
-    }
-  })
-
-  const submit = form.handleSubmit(data => {
-    updateProfile({
-      variables: {
-        data: {
-          profile: {
-            fullName: data.fullName,
-            gender: data.gender,
-            age: data.age,
-            bio: data.bio
-          },
-          measurement: {
-            heightCm: data.heightCm,
-            weightKg: data.weightKg,
-            goalWeightKg: data.goalWeightKg,
-            chestCm: data.heightCm,
-            waistCm: data.heightCm,
-            thighCm: data.heightCm,
-            armCm: data.heightCm,
-            activityLevel: data.activityLevel,
-            nutritionGoal: data.nutritionGoal
-          }
-        }
-      }
-    })
-  })
-
-  return (
-    <form
-      onSubmit={submit}
-      className="space-y-6 rounded-xl bg-white p-5"
-    >
-      <div className="flex justify-between">
-        <HeadingWithIcon Icon={User}>Personal Information</HeadingWithIcon>
-        <div className="flex justify-end gap-3">
-          <Button
-            variant={'outline'}
-            type="button"
-          >
-            Cancel
-          </Button>
-          <Button
-            variant={'accent'}
-            type="submit"
-            disabled={loading}
-          >
-            Save changes
-          </Button>
+          <div>
+            <SkeletonLoader count={6} className='mb-4' />
+          </div>
         </div>
       </div>
+    )
+  }
 
-      <div className="grid grid-cols-2 gap-8">
-        <GeneralInformationForm form={form} />
-        <BodyMeasurementsForm form={form} />
-      </div>
-    </form>
-  )
+  return <ProfileForm data={data} />
 }

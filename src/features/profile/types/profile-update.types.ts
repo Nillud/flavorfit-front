@@ -1,22 +1,29 @@
-import { ActivityLevel, Gender, NutritionGoal } from "@/__generated__/graphql"
+import {
+  ActivityLevel,
+  Gender,
+  NutritionGoal,
+  UserUpdateInput
+} from '@/__generated__/graphql'
 
 export interface IProfileForm {
-    fullName: string
-    email: string
-    gender?: Gender
-    age?: number
-    bio?: string
+  fullName: string
+  email: string
+  gender?: Gender
+  age?: number
+  bio?: string
 
-    heightCm?: number
-    weightKg?: number
-    goalWeightKg?: number
-    chestCm?: number
-    waistCm?: number
-    thighCm?: number
-    armCm?: number
-    
-    activityLevel?: ActivityLevel
-    nutritionGoal?: NutritionGoal
+  heightCm?: number
+  weightKg?: number
+  goalWeightKg?: number
+  chestCm?: number
+  waistCm?: number
+  thighCm?: number
+  armCm?: number
 
-    avatarUrl?: string
+  activityLevel?: ActivityLevel
+  nutritionGoal?: NutritionGoal
+
+  avatarUrl?: string
 }
+
+export type TProfileForm = Omit<UserUpdateInput, 'password'>

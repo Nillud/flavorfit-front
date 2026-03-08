@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 
 import { NavMenu } from '@/shared/components/custom-ui/nav-menu/NavMenu'
-import { UserInfo } from '@/shared/components/custom-ui/nav-menu/UserInfo'
+import { UserInfo } from '@/shared/components/custom-ui/user-info/UserInfo'
 import { Button } from '@/shared/components/ui/button'
 
 import { PAGES } from '@/shared/config/page.config'
@@ -49,7 +49,7 @@ export function Header() {
         <Logout />
 
         <UserInfo
-          avatarUrl={'https://avatars.githubusercontent.com/u/5?v=4'}
+          avatarUrl={'/images/avatar-placeholder.png'}
           name="Anonymous"
           email={user?.email || ''}
         />

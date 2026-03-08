@@ -1,14 +1,18 @@
-import { Mail, User, UserCircle } from 'lucide-react'
-import { UseFormReturn } from 'react-hook-form'
+import { CircleSmall, Mail, User, UserCircle } from 'lucide-react'
+import { Controller, UseFormReturn } from 'react-hook-form'
 
-import { InputLabel } from '@/shared/components/custom-ui/input-label/InputLabel'
-import { IProfileForm } from '../types/profile-update.types'
+import { InputLabel } from '@/shared/components/custom-ui/with-label/InputLabel'
+import { SelectLabel } from '@/shared/components/custom-ui/with-label/SelectLabel'
+
+import { Gender } from '@/__generated__/graphql'
+
+import { TProfileForm } from '../types/profile-update.types'
 import { AvatarUpload } from './AvatarUpload'
 
 export function GeneralInformationForm({
   form
 }: {
-  form: UseFormReturn<IProfileForm, unknown, IProfileForm>
+  form: UseFormReturn<TProfileForm, unknown, TProfileForm>
 }) {
   const { register } = form
 
@@ -17,20 +21,27 @@ export function GeneralInformationForm({
       <h2 className="mb-6 text-lg font-semibold">General information</h2>
 
       <div className="space-y-4">
-        <div className='flex items-center gap-4'>
-          <AvatarUpload
-            onChange={url =>
-              form.setValue('avatarUrl', url, { shouldDirty: true })
-            }
-            value={form.watch('avatarUrl') || undefined}
+        <div className="flex items-center gap-4">
+          <Controller
+            control={form.control}
+            name="avatarUrl"
+            render={({ field }) => (
+              <AvatarUpload
+                onChange={field.onChange}
+                value={field.value || undefined}
+              />
+            )}
           />
 
-          <InputLabel
-            Icon={User}
-            label="Full name"
-            placeholder="Full name"
-            {...register('fullName')}
-          />
+          <div className="w-full">
+            <InputLabel
+              Icon={User}
+              label="Full name"
+              placeholder="Full name"
+              className="grow"
+              {...register('profile.fullName')}
+            />
+          </div>
         </div>
 
         <InputLabel
@@ -40,19 +51,47 @@ export function GeneralInformationForm({
           {...register('email')}
         />
 
-        <InputLabel
-          Icon={UserCircle}
-          label="Age"
-          placeholder="Age"
-          {...register('age')}
-        />
+        <div className="grid grid-cols-2 gap-2">
+          <Controller
+            control={form.control}
+            name="profile.gender"
+            render={({ field }) => (
+              <SelectLabel
+                Icon={CircleSmall}
+                label="Gender"
+                value={field.value}
+                onChange={field.onChange}
+                options={[
+                  {
+                    label: 'Male',
+                    value: Gender.Male
+                  },
+                  {
+                    label: 'Female',
+                    value: Gender.Female
+                  }
+                ]}
+              />
+            )}
+          />
+
+          <InputLabel
+            Icon={UserCircle}
+            label="Age"
+            placeholder="Age"
+            type="number"
+            {...register('profile.age', {
+              setValueAs: value => (value === '' ? undefined : Number(value))
+            })}
+          />
+        </div>
 
         <label className="relative block">
           <span className="mb-1 block text-sm opacity-50">Bio</span>
           <textarea
-            className="w-full resize-none rounded-md border bg-[#ececec] p-3 font-mono"
+            className="w-full resize-none rounded-xl border bg-[#ececec] p-3 font-mono"
             placeholder="Bio"
-            {...register('bio')}
+            {...register('profile.bio')}
           />
         </label>
       </div>

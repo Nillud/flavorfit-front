@@ -23,7 +23,7 @@ type Documents = {
     "mutation ResetPassword($data: ResetPasswordInput!) {\n  resetPassword(data: $data)\n}": typeof types.ResetPasswordDocument,
     "mutation VerifyEmail($token: String!) {\n  verifyEmail(token: $token)\n}": typeof types.VerifyEmailDocument,
     "query GetProfile {\n  me {\n    id\n    email\n    avatarUrl\n    profile {\n      fullName\n      gender\n      age\n      bio\n    }\n    measurement {\n      heightCm\n      weightKg\n      goalWeightKg\n      chestCm\n      waistCm\n      thighCm\n      armCm\n      activityLevel\n      nutritionGoal\n    }\n  }\n}": typeof types.GetProfileDocument,
-    "mutation UpdateProfile($data: UserUpdateInput!) {\n  updateProfile(data: $data) {\n    id\n    email\n    profile {\n      fullName\n      gender\n      age\n      bio\n    }\n    measurement {\n      heightCm\n      weightKg\n      goalWeightKg\n      chestCm\n      waistCm\n      thighCm\n      armCm\n      activityLevel\n      nutritionGoal\n    }\n  }\n}": typeof types.UpdateProfileDocument,
+    "mutation UpdateProfile($data: UserUpdateInput!) {\n  updateProfile(data: $data) {\n    id\n    email\n    avatarUrl\n    profile {\n      fullName\n      gender\n      age\n      bio\n    }\n    measurement {\n      heightCm\n      weightKg\n      goalWeightKg\n      chestCm\n      waistCm\n      thighCm\n      armCm\n      activityLevel\n      nutritionGoal\n    }\n  }\n}": typeof types.UpdateProfileDocument,
 };
 const documents: Documents = {
     "query GetNewTokens {\n  newTokens {\n    user {\n      id\n    }\n  }\n}": types.GetNewTokensDocument,
@@ -35,7 +35,7 @@ const documents: Documents = {
     "mutation ResetPassword($data: ResetPasswordInput!) {\n  resetPassword(data: $data)\n}": types.ResetPasswordDocument,
     "mutation VerifyEmail($token: String!) {\n  verifyEmail(token: $token)\n}": types.VerifyEmailDocument,
     "query GetProfile {\n  me {\n    id\n    email\n    avatarUrl\n    profile {\n      fullName\n      gender\n      age\n      bio\n    }\n    measurement {\n      heightCm\n      weightKg\n      goalWeightKg\n      chestCm\n      waistCm\n      thighCm\n      armCm\n      activityLevel\n      nutritionGoal\n    }\n  }\n}": types.GetProfileDocument,
-    "mutation UpdateProfile($data: UserUpdateInput!) {\n  updateProfile(data: $data) {\n    id\n    email\n    profile {\n      fullName\n      gender\n      age\n      bio\n    }\n    measurement {\n      heightCm\n      weightKg\n      goalWeightKg\n      chestCm\n      waistCm\n      thighCm\n      armCm\n      activityLevel\n      nutritionGoal\n    }\n  }\n}": types.UpdateProfileDocument,
+    "mutation UpdateProfile($data: UserUpdateInput!) {\n  updateProfile(data: $data) {\n    id\n    email\n    avatarUrl\n    profile {\n      fullName\n      gender\n      age\n      bio\n    }\n    measurement {\n      heightCm\n      weightKg\n      goalWeightKg\n      chestCm\n      waistCm\n      thighCm\n      armCm\n      activityLevel\n      nutritionGoal\n    }\n  }\n}": types.UpdateProfileDocument,
 };
 
 /**
@@ -91,7 +91,7 @@ export function graphql(source: "query GetProfile {\n  me {\n    id\n    email\n
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "mutation UpdateProfile($data: UserUpdateInput!) {\n  updateProfile(data: $data) {\n    id\n    email\n    profile {\n      fullName\n      gender\n      age\n      bio\n    }\n    measurement {\n      heightCm\n      weightKg\n      goalWeightKg\n      chestCm\n      waistCm\n      thighCm\n      armCm\n      activityLevel\n      nutritionGoal\n    }\n  }\n}"): (typeof documents)["mutation UpdateProfile($data: UserUpdateInput!) {\n  updateProfile(data: $data) {\n    id\n    email\n    profile {\n      fullName\n      gender\n      age\n      bio\n    }\n    measurement {\n      heightCm\n      weightKg\n      goalWeightKg\n      chestCm\n      waistCm\n      thighCm\n      armCm\n      activityLevel\n      nutritionGoal\n    }\n  }\n}"];
+export function graphql(source: "mutation UpdateProfile($data: UserUpdateInput!) {\n  updateProfile(data: $data) {\n    id\n    email\n    avatarUrl\n    profile {\n      fullName\n      gender\n      age\n      bio\n    }\n    measurement {\n      heightCm\n      weightKg\n      goalWeightKg\n      chestCm\n      waistCm\n      thighCm\n      armCm\n      activityLevel\n      nutritionGoal\n    }\n  }\n}"): (typeof documents)["mutation UpdateProfile($data: UserUpdateInput!) {\n  updateProfile(data: $data) {\n    id\n    email\n    avatarUrl\n    profile {\n      fullName\n      gender\n      age\n      bio\n    }\n    measurement {\n      heightCm\n      weightKg\n      goalWeightKg\n      chestCm\n      waistCm\n      thighCm\n      armCm\n      activityLevel\n      nutritionGoal\n    }\n  }\n}"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
