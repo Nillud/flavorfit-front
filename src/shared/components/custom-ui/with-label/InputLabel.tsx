@@ -7,8 +7,8 @@ import { Input } from '@/shared/components/ui/input'
 import { LabelIcon } from './LabelIcon'
 
 interface Props extends ComponentProps<'input'> {
-  label: string
-  Icon: LucideIcon
+  label?: string
+  Icon?: LucideIcon
 }
 
 export function InputLabel({ label, Icon, className, type, ...props }: Props) {
@@ -19,7 +19,7 @@ export function InputLabel({ label, Icon, className, type, ...props }: Props) {
         Icon={Icon}
       />
       <Input
-        className={cn(className, 'rounded-xl bg-[#ececec] pl-9')}
+        className={cn('rounded-xl bg-[#ececec] pl-9', className)}
         type={type}
         {...props}
       />

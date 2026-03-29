@@ -8,8 +8,8 @@ interface Props extends PropsWithChildren {
 export function HeadingWithIcon({ Icon, children }: Props) {
   return (
     <div className="flex items-center">
-      <Icon className="mr-1.5 opacity-45" />
-      <h2 className="text-xl font-semibold">{children}</h2>
+      <Icon className="mr-1.5 opacity-60" />
+      <h2 className="text-xl font-semibold text-[#222]">{children}</h2>
     </div>
   )
 }

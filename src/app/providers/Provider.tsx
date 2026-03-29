@@ -1,6 +1,7 @@
 'use client'
 
 import { ApolloProvider } from '@apollo/client/react'
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import type { PropsWithChildren } from 'react'
 import { Toaster } from 'react-hot-toast'
 
@@ -10,13 +11,15 @@ export function Provider({ children }: PropsWithChildren) {
   const apollo = getApolloClient()
 
   return (
-    <ApolloProvider client={apollo}>
-      {children}
+    <NuqsAdapter>
+      <ApolloProvider client={apollo}>
+        {children}
 
-      <Toaster
-        position="top-center"
-        containerClassName="mt-16 font-mono text-sm"
-      />
-    </ApolloProvider>
+        <Toaster
+          position="top-center"
+          containerClassName="mt-16 font-mono text-sm"
+        />
+      </ApolloProvider>
+    </NuqsAdapter>
   )
 }
