@@ -8,6 +8,7 @@ class PageConfig {
   readonly ANALYTICS = `${this.DASHBOARD}/analytics`
   readonly ORDER_GROCERIES = `${this.DASHBOARD}/order-groceries`
   readonly RECIPES = `${this.DASHBOARD}/recipes`
+  readonly RECIPE_DETAIL = (slug: string) => this.RECIPES + `/${slug}`
   readonly PROFILE = `${this.DASHBOARD}/profile`
 
   private readonly AUTH = '/auth'

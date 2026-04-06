@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
 import { Button } from '@/shared/components/ui/button'
-import { HeadingWithIcon } from '@/shared/components/ui/heading-with-icon/HeadingWithIcon'
+import { HeadingWithIcon } from '@/shared/components/custom-ui/heading-with-icon/HeadingWithIcon'
 
 import { GetProfileQuery, UpdateProfileDocument } from '@/__generated__/graphql'
 

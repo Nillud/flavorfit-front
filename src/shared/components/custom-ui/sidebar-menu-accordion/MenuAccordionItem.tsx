@@ -30,15 +30,15 @@ export function MenuAccordionItem({ item, activeValue, onValueChange }: Props) {
           )}
           onClick={() => setIsOpen(prev => !prev)}
         >
-          <span className="flex items-center gap-2 text-sm font-medium">
-            <item.Icon size={20} />
+          <span className="flex items-center gap-2 font-semibold">
+            <item.Icon size={20} className='shrink-0' />
             {item.name}
           </span>
 
           {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
         </CollapsibleTrigger>
         <CollapsibleContent>
-          <ul className="space-y-2 pt-1 pl-4 text-sm">
+          <ul className="space-y-2 pt-1 pl-4">
             {item.items.map(child => (
               <li
                 key={child.value}
