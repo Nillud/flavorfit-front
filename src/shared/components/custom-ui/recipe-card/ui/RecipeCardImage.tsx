@@ -1,3 +1,4 @@
+import { cn } from '@/shared/utils'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -16,12 +17,15 @@ export function RecipeCardImage({ image, title, slug, size }: Props) {
   return (
     <Link
       href={PAGES.RECIPE_DETAIL(slug)}
-      className="relative w-full overflow-hidden rounded-2xl"
+      className="relative w-full overflow-hidden"
     >
       <Image
         src={image}
         alt={title}
-        className="object-cover transition-transform duration-200 will-change-transform group-hover:scale-[1.03]"
+        className={cn(
+          'w-full rounded-2xl object-cover transition-transform duration-200 will-change-transform group-hover:scale-[1.03]',
+          size === 'sm' ? 'h-36' : 'h-40'
+        )}
         width={size === 'sm' ? 240 : 300}
         height={size === 'sm' ? 140 : 160}
         draggable={false}

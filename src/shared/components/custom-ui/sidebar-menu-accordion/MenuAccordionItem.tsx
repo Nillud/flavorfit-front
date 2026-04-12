@@ -9,13 +9,17 @@ import {
 } from '../../ui/collapsible'
 import { ISidebarMenuAccordionItem } from './sidebar-menu-accordion.types'
 
-interface Props {
-  item: ISidebarMenuAccordionItem
-  activeValue?: string
+interface Props<K extends string = string> {
+  item: ISidebarMenuAccordionItem<K>
+  activeValue?: string | null
   onValueChange?: (value: string) => void
 }
 
-export function MenuAccordionItem({ item, activeValue, onValueChange }: Props) {
+export function MenuAccordionItem<K extends string = string>({
+  item,
+  activeValue,
+  onValueChange
+}: Props<K>) {
   const [isOpen, setIsOpen] = useState<boolean>(item.isInitialOpen ?? false)
 
   return (
@@ -31,7 +35,10 @@ export function MenuAccordionItem({ item, activeValue, onValueChange }: Props) {
           onClick={() => setIsOpen(prev => !prev)}
         >
           <span className="flex items-center gap-2 font-semibold">
-            <item.Icon size={20} className='shrink-0' />
+            <item.Icon
+              size={20}
+              className="shrink-0"
+            />
             {item.name}
           </span>
 

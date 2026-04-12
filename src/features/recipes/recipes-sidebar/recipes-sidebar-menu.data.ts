@@ -2,61 +2,78 @@ import { Apple, ChefHat, CookingPot, MonitorCog, Pill } from 'lucide-react'
 
 import { ISidebarMenuAccordionItem } from '@/shared/components/custom-ui/sidebar-menu-accordion/sidebar-menu-accordion.types'
 
-export const recipesSidebarMenuData: ISidebarMenuAccordionItem[] = [
+import {
+  Cuisine,
+  DietaryPreference,
+  HealthGoal,
+  MealType,
+  SpecialOccasion
+} from '@/__generated__/graphql'
+
+import { TRecipeFilters } from './recipes-sidebar-menu.types'
+
+export const recipesSidebarMenuData: ISidebarMenuAccordionItem<
+  keyof TRecipeFilters
+>[] = [
   {
     isInitialOpen: true,
     Icon: CookingPot,
     name: 'Meal Type',
+    key: 'mealType',
     items: [
-      { label: 'Breakfast', value: 'breakfast' },
-      { label: 'Lunch', value: 'lunch', badgeValue: '+1' },
-      { label: 'Dinner', value: 'dinner' },
-      { label: 'Snack', value: 'snack' },
-      { label: 'Dessert', value: 'dessert' },
-      { label: 'Drinks', value: 'drinks' }
+      { label: 'Breakfast', value: MealType.Breakfast },
+      { label: 'Lunch', value: MealType.Lunch, badgeValue: '+1' },
+      { label: 'Dinner', value: MealType.Dinner },
+      { label: 'Snack', value: MealType.Snack },
+      { label: 'Dessert', value: MealType.Dessert },
+      { label: 'Drinks', value: MealType.Drinks }
     ]
   },
   {
     isInitialOpen: true,
     Icon: Apple,
     name: 'Dietary Preferences',
+    key: 'dietaryPreference',
     items: [
-      { label: 'Vegetarian', value: 'vegetarian' },
-      { label: 'Low-Carb', value: 'low-carb', badgeValue: '+2' },
-      { label: 'Gluten-Free', value: 'gluten-free' },
-      { label: 'Keto', value: 'keto' },
-      { label: 'Dairy-Free', value: 'dairy-free' }
+      { label: 'Vegetarian', value: DietaryPreference.Vegetarian },
+      { label: 'Low-Carb', value: DietaryPreference.LowCarb, badgeValue: '+2' },
+      { label: 'Gluten-Free', value: DietaryPreference.GlutenFree },
+      { label: 'Keto', value: DietaryPreference.Keto },
+      { label: 'Dairy-Free', value: DietaryPreference.DairyFree }
     ]
   },
   {
     Icon: Pill,
     name: 'Health Goals',
+    key: 'healthGoal',
     items: [
-      { label: 'Weight Loss', value: 'weight-loss' },
-      { label: 'Muscle Gain', value: 'muscle-gain' },
-      { label: 'Heart Health', value: 'heart-health' }
+      { label: 'Weight Loss', value: HealthGoal.WeightLoss },
+      { label: 'Muscle Gain', value: HealthGoal.MuscleGain },
+      { label: 'Heart Health', value: HealthGoal.HeartHealth }
     ]
   },
   {
     Icon: ChefHat,
     name: 'Cuisine',
+    key: 'cuisine',
     items: [
-      { label: 'Russian', value: 'russian' },
-      { label: 'Italian', value: 'italian' },
-      { label: 'Chinese', value: 'chinese' },
-      { label: 'Mexican', value: 'mexican' },
-      { label: 'Indian', value: 'indian' },
-      { label: 'French', value: 'french' }
+      { label: 'Russian', value: Cuisine.Russian },
+      { label: 'Italian', value: Cuisine.Italian },
+      { label: 'Chinese', value: Cuisine.Chinese },
+      { label: 'Mexican', value: Cuisine.Mexican },
+      { label: 'Indian', value: Cuisine.Indian },
+      { label: 'French', value: Cuisine.French }
     ]
   },
   {
     Icon: MonitorCog,
     name: 'Special Occasions',
+    key: 'specialOccasion',
     items: [
-      { label: 'Holiday', value: 'holiday' },
-      { label: 'Birthday', value: 'birthday' },
-      { label: 'Anniversary', value: 'anniversary' },
-      { label: 'Party', value: 'party' }
+      { label: 'Holiday', value: SpecialOccasion.Holiday },
+      { label: 'Birthday', value: SpecialOccasion.Birthday },
+      { label: 'Anniversary', value: SpecialOccasion.Anniversary },
+      { label: 'Party', value: SpecialOccasion.Party }
     ]
   }
 ]

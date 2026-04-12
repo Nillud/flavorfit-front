@@ -4,22 +4,23 @@ import { SidebarMenuAccordion } from '@/shared/components/custom-ui/sidebar-menu
 import { InputLabel } from '@/shared/components/custom-ui/with-label/InputLabel'
 
 import { recipesSidebarMenuData } from './recipes-sidebar-menu.data'
+import { TRecipeFilters } from './recipes-sidebar-menu.types'
 
 interface Props {
-  filter: string
-  setFilter: (value: string) => void
+  filters: TRecipeFilters
+  setFilters: (filters: Partial<TRecipeFilters>) => void
 
   searchTerm: string
   setSearchTerm: (value: string) => void
 }
 
 export function RecipesSidebar({
-  filter,
-  setFilter,
+  filters,
+  setFilters,
   searchTerm,
   setSearchTerm
 }: Props) {
-  const setActiveFilter = (filter: string) => setFilter(filter)
+  const setActiveFilter = (key: keyof TRecipeFilters, value: string) => setFilters({ [key]: value })
 
   return (
     <div className="w-full max-w-64 space-y-6 rounded-2xl bg-white p-4">
@@ -33,7 +34,7 @@ export function RecipesSidebar({
 
       <SidebarMenuAccordion
         data={recipesSidebarMenuData}
-        activeValue={filter}
+        values={filters}
         onValueChange={setActiveFilter}
       />
     </div>
