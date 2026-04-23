@@ -13,7 +13,7 @@ export async function jwtVerifyServer(accessToken: string) {
   try {
     const { payload }: { payload: TAuthTokenData } = await jwtVerify(
       accessToken,
-      new TextEncoder().encode(process.env.JWT_SECRET_KEY)
+      new TextEncoder().encode(process.env.JWT_SECRET)
     )
     return payload
   } catch (error) {
