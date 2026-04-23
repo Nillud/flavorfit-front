@@ -6,7 +6,7 @@ import { jwtVerifyServer } from './shared/lib/server/jwt-verify.server'
 
 export async function proxy(req: NextRequest, res: NextResponse) {
   const tokens = await getTokens(req)
-  console.log('tokens',tokens)
+
   if (!tokens) {
     return NextResponse.redirect(new URL(PAGES.LOGIN, req.url))
   }
