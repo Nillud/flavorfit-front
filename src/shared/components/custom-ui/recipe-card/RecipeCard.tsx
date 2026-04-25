@@ -17,7 +17,7 @@ import { RecipeCardImage } from './ui/RecipeCardImage'
 import { RecipeCardMetaBadges } from './ui/badges/RecipeCardMetaBadges'
 
 interface Props {
-  recipe: GetRecipesQuery['recipes']['items'][0]
+  recipe: GetRecipesQuery['recipes'][0]
   size?: TRecipeCardSize
 }
 
@@ -26,7 +26,7 @@ export function RecipeCard({ recipe, size }: Props) {
     <div
       className={cn(
         recipeCardVariants({ size }),
-        'flex h-full flex-col justify-between transition-shadow duration-300 group-hover:shadow-[0_3px_14px_rgba(0,0,0,.1)]'
+        'transition-shadow duration-300 group-hover:shadow-[0_3px_14px_rgba(0,0,0,.1)]'
       )}
     >
       <RecipeCardImage
@@ -66,8 +66,7 @@ export function RecipeCard({ recipe, size }: Props) {
       <RecipeCardFooter
         difficultyLevel={recipe.difficulty}
         likes={recipe.likes}
-        // TODO: add views to recipe and pass it here
-        views={156100}
+        views={recipe.views}
         size={size}
       />
     </div>

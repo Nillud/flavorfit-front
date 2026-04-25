@@ -72,10 +72,15 @@ export type CommentCreateInput = {
 
 export type CommentModel = {
   __typename?: 'CommentModel';
+  author: UserModel;
   content: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type CommentUpdateInput = {
+  content: Scalars['String']['input'];
 };
 
 export const Cuisine = {
@@ -133,7 +138,6 @@ export type IngredientCreateInput = {
 
 export type IngredientModel = {
   __typename?: 'IngredientModel';
-  content: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
   iconUrl: Scalars['String']['output'];
   id: Scalars['ID']['output'];
@@ -156,6 +160,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createComment: CommentModel;
   createIngredient: IngredientModel;
+  createOrder: OrderModel;
   createRecipe: RecipeModel;
   deleteComment: CommentModel;
   deleteIngredient: IngredientModel;
@@ -184,8 +189,13 @@ export type MutationCreateIngredientArgs = {
 };
 
 
+export type MutationCreateOrderArgs = {
+  input: OrderCreateInput;
+};
+
+
 export type MutationCreateRecipeArgs = {
-  input: RecipeInput;
+  input: RecipeCreateInput;
 };
 
 
@@ -231,7 +241,7 @@ export type MutationToggleLikeArgs = {
 
 export type MutationUpdateCommentArgs = {
   commentId: Scalars['String']['input'];
-  input: CommentCreateInput;
+  input: CommentUpdateInput;
 };
 
 
@@ -248,7 +258,7 @@ export type MutationUpdateProfileArgs = {
 
 export type MutationUpdateRecipeArgs = {
   id: Scalars['String']['input'];
-  input: RecipeInput;
+  input: RecipeCreateInput;
 };
 
 
@@ -256,15 +266,8 @@ export type MutationVerifyEmailArgs = {
   token: Scalars['String']['input'];
 };
 
-export type NutritionFactInput = {
-  carbohydrates: Scalars['Float']['input'];
-  fats: Scalars['Float']['input'];
-  fiber: Scalars['Float']['input'];
-  proteins: Scalars['Float']['input'];
-};
-
-export type NutritionFactModel = {
-  __typename?: 'NutritionFactModel';
+export type NutritionFact = {
+  __typename?: 'NutritionFact';
   carbohydrates: Scalars['Float']['output'];
   createdAt: Scalars['DateTime']['output'];
   fats: Scalars['Float']['output'];
@@ -272,6 +275,13 @@ export type NutritionFactModel = {
   id: Scalars['ID']['output'];
   proteins: Scalars['Float']['output'];
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type NutritionFactUpdateInput = {
+  carbohydrates: Scalars['Float']['input'];
+  fats: Scalars['Float']['input'];
+  fiber: Scalars['Float']['input'];
+  proteins: Scalars['Float']['input'];
 };
 
 export const NutritionGoal = {
@@ -286,17 +296,17 @@ export type OrderCreateInput = {
 };
 
 export type OrderItemInput = {
+  ingredientId: Scalars['ID']['input'];
   quantity?: Scalars['Float']['input'];
-  recipeIngredientId: Scalars['ID']['input'];
 };
 
 export type OrderItemModel = {
   __typename?: 'OrderItemModel';
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
+  ingredient: IngredientModel;
   price: Scalars['String']['output'];
   quantity?: Maybe<Scalars['Int']['output']>;
-  recipeIngredient: RecipeIngredientModel;
   updatedAt: Scalars['DateTime']['output'];
 };
 
@@ -307,6 +317,7 @@ export type OrderModel = {
   items: Array<OrderItemModel>;
   orderId: Scalars['String']['output'];
   status: OrderStatus;
+  total: Scalars['Float']['output'];
   updatedAt: Scalars['DateTime']['output'];
 };
 
@@ -339,11 +350,13 @@ export type ProfileUpdateInput = {
 export type Query = {
   __typename?: 'Query';
   adminRecipes: Array<RecipeModel>;
+  getByOrderId: OrderModel;
   ingredient: IngredientModel;
   ingredients: Array<IngredientModel>;
   me: UserModel;
   myOrders: Array<OrderModel>;
   newTokens: AuthResponse;
+  randomRecipe: RecipeModel;
   recipeById: RecipeModel;
   recipeBySlug: RecipeModel;
   recipes: GetAllRecipesModel;
@@ -351,13 +364,13 @@ export type Query = {
 };
 
 
-export type QueryIngredientArgs = {
-  id: Scalars['String']['input'];
+export type QueryGetByOrderIdArgs = {
+  orderId: Scalars['String']['input'];
 };
 
 
-export type QueryMyOrdersArgs = {
-  input: OrderCreateInput;
+export type QueryIngredientArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -373,6 +386,25 @@ export type QueryRecipeBySlugArgs = {
 
 export type QueryRecipesArgs = {
   input: RecipesQueryInput;
+};
+
+export type RecipeCreateInput = {
+  calories: Scalars['Int']['input'];
+  cookingTime: Scalars['Int']['input'];
+  cuisine: Cuisine;
+  description: Scalars['String']['input'];
+  dietaryPreference: DietaryPreference;
+  difficulty: Difficulty;
+  healthGoal: HealthGoal;
+  image: Scalars['String']['input'];
+  ingredients?: InputMaybe<Array<RecipeIngredientInput>>;
+  mealType: MealType;
+  nutritionFact?: InputMaybe<NutritionFactUpdateInput>;
+  recipeSteps?: InputMaybe<Array<RecipeStepInput>>;
+  slug: Scalars['String']['input'];
+  specialOccasion: SpecialOccasion;
+  tags?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
 };
 
 export type RecipeIngredientInput = {
@@ -391,30 +423,12 @@ export type RecipeIngredientModel = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
-export type RecipeInput = {
-  calories: Scalars['Int']['input'];
-  cookingTime: Scalars['Int']['input'];
-  cuisine: Cuisine;
-  description: Scalars['String']['input'];
-  dietaryPreference: DietaryPreference;
-  difficulty: Difficulty;
-  healthGoal: HealthGoal;
-  image: Scalars['String']['input'];
-  ingredients?: InputMaybe<Array<RecipeIngredientInput>>;
-  mealType: MealType;
-  nutritionFact?: InputMaybe<NutritionFactInput>;
-  recipeSteps?: InputMaybe<Array<RecipeStepInput>>;
-  slug: Scalars['String']['input'];
-  specialOccasion: SpecialOccasion;
-  tags?: InputMaybe<Scalars['String']['input']>;
-  title: Scalars['String']['input'];
-};
-
 export type RecipeModel = {
   __typename?: 'RecipeModel';
   author: UserModel;
   authorId: Scalars['String']['output'];
   calories: Scalars['Int']['output'];
+  comments?: Maybe<Array<CommentModel>>;
   cookingTime: Scalars['Int']['output'];
   createdAt: Scalars['DateTime']['output'];
   cuisine: Cuisine;
@@ -426,7 +440,7 @@ export type RecipeModel = {
   image: Scalars['String']['output'];
   likes?: Maybe<Scalars['Int']['output']>;
   mealType: MealType;
-  nutritionFact?: Maybe<NutritionFactModel>;
+  nutritionFact?: Maybe<NutritionFact>;
   recipeIngredients?: Maybe<Array<RecipeIngredientModel>>;
   recipeSteps?: Maybe<Array<RecipeStepModel>>;
   slug: Scalars['String']['output'];
@@ -456,6 +470,7 @@ export type RecipeStepModel = {
   createdAt: Scalars['DateTime']['output'];
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  image: Scalars['String']['output'];
   order: Scalars['Int']['output'];
   recipe: RecipeModel;
   recipeId: Scalars['String']['output'];
@@ -603,6 +618,20 @@ export type UpdateProfileMutationVariables = Exact<{
 
 export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile: { __typename?: 'UserModel', id: string, email: string, avatarUrl?: string | null, profile?: { __typename?: 'ProfileModel', fullName: string, gender?: Gender | null, age?: number | null, bio?: string | null } | null, measurement?: { __typename?: 'BodyMeasurementModel', heightCm?: number | null, weightKg?: number | null, goalWeightKg?: number | null, chestCm?: number | null, waistCm?: number | null, thighCm?: number | null, armCm?: number | null, activityLevel?: ActivityLevel | null, nutritionGoal?: NutritionGoal | null } | null } };
 
+export type AddNewCommentMutationVariables = Exact<{
+  input: CommentCreateInput;
+}>;
+
+
+export type AddNewCommentMutation = { __typename?: 'Mutation', createComment: { __typename?: 'CommentModel', id: string, content: string, createdAt: any, author: { __typename?: 'UserModel', avatarUrl?: string | null, profile?: { __typename?: 'ProfileModel', fullName: string } | null } } };
+
+export type GetRecipeBySlugQueryVariables = Exact<{
+  slug: Scalars['String']['input'];
+}>;
+
+
+export type GetRecipeBySlugQuery = { __typename?: 'Query', recipeBySlug: { __typename?: 'RecipeModel', id: string, image: string, title: string, description: string, slug: string, calories: number, cookingTime: number, difficulty: Difficulty, mealType: MealType, likes?: number | null, views: number, author: { __typename?: 'UserModel', avatarUrl?: string | null, profile?: { __typename?: 'ProfileModel', fullName: string } | null }, tags?: Array<{ __typename?: 'RecipeTagModel', name: string }> | null, recipeIngredients?: Array<{ __typename?: 'RecipeIngredientModel', quantity: number, unit: Unit, ingredient: { __typename?: 'IngredientModel', id: string, name: string, iconUrl: string, price: number } }> | null, recipeSteps?: Array<{ __typename?: 'RecipeStepModel', id: string, title: string, description: string, image: string }> | null, nutritionFact?: { __typename?: 'NutritionFact', carbohydrates: number, fats: number, proteins: number, fiber: number } | null, comments?: Array<{ __typename?: 'CommentModel', id: string, content: string, createdAt: any, author: { __typename?: 'UserModel', avatarUrl?: string | null, profile?: { __typename?: 'ProfileModel', fullName: string } | null } }> | null } };
+
 export type GetRecipesQueryVariables = Exact<{
   input: RecipesQueryInput;
 }>;
@@ -621,4 +650,6 @@ export const ResetPasswordDocument = {"kind":"Document","definitions":[{"kind":"
 export const VerifyEmailDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"VerifyEmail"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"token"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"verifyEmail"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"token"},"value":{"kind":"Variable","name":{"kind":"Name","value":"token"}}}]}]}}]} as unknown as DocumentNode<VerifyEmailMutation, VerifyEmailMutationVariables>;
 export const GetProfileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetProfile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"gender"}},{"kind":"Field","name":{"kind":"Name","value":"age"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}}]}},{"kind":"Field","name":{"kind":"Name","value":"measurement"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"heightCm"}},{"kind":"Field","name":{"kind":"Name","value":"weightKg"}},{"kind":"Field","name":{"kind":"Name","value":"goalWeightKg"}},{"kind":"Field","name":{"kind":"Name","value":"chestCm"}},{"kind":"Field","name":{"kind":"Name","value":"waistCm"}},{"kind":"Field","name":{"kind":"Name","value":"thighCm"}},{"kind":"Field","name":{"kind":"Name","value":"armCm"}},{"kind":"Field","name":{"kind":"Name","value":"activityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"nutritionGoal"}}]}}]}}]}}]} as unknown as DocumentNode<GetProfileQuery, GetProfileQueryVariables>;
 export const UpdateProfileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateProfile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UserUpdateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateProfile"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"gender"}},{"kind":"Field","name":{"kind":"Name","value":"age"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}}]}},{"kind":"Field","name":{"kind":"Name","value":"measurement"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"heightCm"}},{"kind":"Field","name":{"kind":"Name","value":"weightKg"}},{"kind":"Field","name":{"kind":"Name","value":"goalWeightKg"}},{"kind":"Field","name":{"kind":"Name","value":"chestCm"}},{"kind":"Field","name":{"kind":"Name","value":"waistCm"}},{"kind":"Field","name":{"kind":"Name","value":"thighCm"}},{"kind":"Field","name":{"kind":"Name","value":"armCm"}},{"kind":"Field","name":{"kind":"Name","value":"activityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"nutritionGoal"}}]}}]}}]}}]} as unknown as DocumentNode<UpdateProfileMutation, UpdateProfileMutationVariables>;
+export const AddNewCommentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AddNewComment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CommentCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createComment"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fullName"}}]}}]}}]}}]}}]} as unknown as DocumentNode<AddNewCommentMutation, AddNewCommentMutationVariables>;
+export const GetRecipeBySlugDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetRecipeBySlug"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"recipeBySlug"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"calories"}},{"kind":"Field","name":{"kind":"Name","value":"cookingTime"}},{"kind":"Field","name":{"kind":"Name","value":"difficulty"}},{"kind":"Field","name":{"kind":"Name","value":"mealType"}},{"kind":"Field","name":{"kind":"Name","value":"likes"}},{"kind":"Field","name":{"kind":"Name","value":"views"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fullName"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"recipeIngredients"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"unit"}},{"kind":"Field","name":{"kind":"Name","value":"ingredient"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}},{"kind":"Field","name":{"kind":"Name","value":"price"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"recipeSteps"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}}]}},{"kind":"Field","name":{"kind":"Name","value":"nutritionFact"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"carbohydrates"}},{"kind":"Field","name":{"kind":"Name","value":"fats"}},{"kind":"Field","name":{"kind":"Name","value":"proteins"}},{"kind":"Field","name":{"kind":"Name","value":"fiber"}}]}},{"kind":"Field","name":{"kind":"Name","value":"comments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fullName"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetRecipeBySlugQuery, GetRecipeBySlugQueryVariables>;
 export const GetRecipesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetRecipes"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RecipesQueryInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"recipes"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasMore"}},{"kind":"Field","name":{"kind":"Name","value":"total"}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"calories"}},{"kind":"Field","name":{"kind":"Name","value":"cookingTime"}},{"kind":"Field","name":{"kind":"Name","value":"difficulty"}},{"kind":"Field","name":{"kind":"Name","value":"likes"}},{"kind":"Field","name":{"kind":"Name","value":"views"}},{"kind":"Field","name":{"kind":"Name","value":"mealType"}}]}}]}}]}}]} as unknown as DocumentNode<GetRecipesQuery, GetRecipesQueryVariables>;

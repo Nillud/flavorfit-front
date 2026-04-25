@@ -17,14 +17,14 @@ export function RecipeCardImage({ image, title, slug, size }: Props) {
   return (
     <Link
       href={PAGES.RECIPE_DETAIL(slug)}
-      className="relative w-full overflow-hidden"
+      className="relative w-full"
     >
       <Image
         src={image}
         alt={title}
         className={cn(
-          'w-full rounded-2xl object-cover transition-transform duration-200 will-change-transform group-hover:scale-[1.03]',
-          size === 'sm' ? 'h-36' : 'h-40'
+          'rounded-2xl object-cover transition-transform duration-200 will-change-transform group-hover:scale-[1.03]',
+          size === 'sm' ? 'h-36 w-60' : 'h-40 w-72'
         )}
         width={size === 'sm' ? 240 : 300}
         height={size === 'sm' ? 140 : 160}

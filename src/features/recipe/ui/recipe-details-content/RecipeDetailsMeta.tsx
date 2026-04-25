@@ -32,7 +32,7 @@ export function RecipeDetailsMeta({ recipe }: Props) {
 
       <div className="flex items-center gap-1">
         <Image
-          src={recipe?.author.avatarUrl || ''}
+          src={recipe?.author.avatarUrl || '/images/avatar-placeholder.png'}
           alt={recipe?.author.profile?.fullName || ''}
           width={24}
           height={24}

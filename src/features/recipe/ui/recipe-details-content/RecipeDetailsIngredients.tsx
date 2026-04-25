@@ -38,7 +38,7 @@ export function RecipeDetailsIngredients({ recipeIngredients }: Props) {
               className="border-border flex h-18.5 w-18.5 flex-col items-center rounded-xl border"
             >
               <Image
-                src={`/images/ingredients/${recipeIngredient.ingredient.iconUrl}`}
+                src={recipeIngredient.ingredient.iconUrl ? `/images/ingredients/${recipeIngredient.ingredient.iconUrl}` : ''}
                 alt={recipeIngredient.ingredient.name}
                 width={43}
                 height={43}

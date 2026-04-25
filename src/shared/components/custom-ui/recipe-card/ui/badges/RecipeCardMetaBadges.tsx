@@ -6,16 +6,14 @@ import { TRecipeCardSize } from '../../types/recipe-card.types'
 import { RecipeCardBadge } from './RecipeCardBadge'
 
 interface Props {
-  recipe: GetRecipesQuery['recipes'][number]
+  recipe: GetRecipesQuery['recipes']['items'][0]
   size: TRecipeCardSize
 }
 
 export function RecipeCardMetaBadges({ recipe, size }: Props) {
   return (
     <div className="mt-4 flex items-center gap-2">
-      <RecipeCardBadge size={size}>
-        {recipe.mealType}
-      </RecipeCardBadge>
+      <RecipeCardBadge size={size}>{recipe.mealType}</RecipeCardBadge>
 
       <RecipeCardBadge
         Icon={Flame}

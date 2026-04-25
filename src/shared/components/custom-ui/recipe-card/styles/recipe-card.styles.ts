@@ -59,8 +59,9 @@ export const recipeCardFooterTextVariants = cva(
   {
     variants: {
       size: {
+        sm: 'text-xs',
         default: 'text-xs',
-        sm: 'text-xs'
+        lg: 'text-sm'
       }
     },
     defaultVariants: {
@@ -70,7 +71,7 @@ export const recipeCardFooterTextVariants = cva(
 )
 
 export const recipeCardDifficultyBadgeVariants = cva(
-  'flex items-center gap-1.5 rounded-md px-2 py-1 font-semibold',
+  'flex items-center gap-1.5 rounded-md px-2 py-0.5 font-semibold',
   {
     variants: {
       tone: {
