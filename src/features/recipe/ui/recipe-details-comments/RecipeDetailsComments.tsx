@@ -55,7 +55,7 @@ export function RecipeDetailsComments({
               >
                 <div className="flex items-center gap-1.5">
                   <Image
-                    src={comment?.author.avatarUrl || ''}
+                    src={comment?.author.avatarUrl || '/images/avatar-placeholder.png'}
                     alt={comment?.author.profile?.fullName || ''}
                     width={24}
                     height={24}

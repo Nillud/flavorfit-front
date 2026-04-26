@@ -1,11 +1,10 @@
 import {
   BookMarked,
-  Calendar,
+  CalendarDays,
   ChartColumn,
   House,
   Settings,
   Store,
-  Users,
   Utensils
 } from 'lucide-react'
 
@@ -20,7 +19,7 @@ export const navMenuItems: IMenuItem[] = [
     href: PAGES.DASHBOARD
   },
   {
-    icon: Calendar,
+    icon: CalendarDays,
     label: 'Meal Plans',
     href: PAGES.MEAL_PLANS
   },
@@ -37,7 +36,7 @@ export const navMenuItems: IMenuItem[] = [
   {
     icon: Store,
     label: 'Order Groceries',
-    href: PAGES.ORDER_GROCERIES
+    href: PAGES.MY_ORDERS
   },
   {
     icon: BookMarked,

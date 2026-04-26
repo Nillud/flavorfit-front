@@ -17,7 +17,7 @@ export const recipesSidebarMenuData: ISidebarMenuAccordionItem<
 >[] = [
   {
     isInitialOpen: true,
-    Icon: CookingPot,
+    icon: CookingPot,
     name: 'Meal Type',
     key: 'mealType',
     items: [
@@ -31,7 +31,7 @@ export const recipesSidebarMenuData: ISidebarMenuAccordionItem<
   },
   {
     isInitialOpen: true,
-    Icon: Apple,
+    icon: Apple,
     name: 'Dietary Preferences',
     key: 'dietaryPreference',
     items: [
@@ -43,7 +43,7 @@ export const recipesSidebarMenuData: ISidebarMenuAccordionItem<
     ]
   },
   {
-    Icon: Pill,
+    icon: Pill,
     name: 'Health Goals',
     key: 'healthGoal',
     items: [
@@ -53,7 +53,7 @@ export const recipesSidebarMenuData: ISidebarMenuAccordionItem<
     ]
   },
   {
-    Icon: ChefHat,
+    icon: ChefHat,
     name: 'Cuisine',
     key: 'cuisine',
     items: [
@@ -66,7 +66,7 @@ export const recipesSidebarMenuData: ISidebarMenuAccordionItem<
     ]
   },
   {
-    Icon: MonitorCog,
+    icon: MonitorCog,
     name: 'Special Occasions',
     key: 'specialOccasion',
     items: [

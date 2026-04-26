@@ -5,6 +5,6 @@ export interface ISidebarMenuAccordionItem<K extends string = string> {
     isInitialOpen?: boolean
     name: string
     key: K
-    Icon: LucideIcon
+    icon: LucideIcon
     items: ISelectItem[]
 }

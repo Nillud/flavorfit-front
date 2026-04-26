@@ -1,7 +1,11 @@
 query Me {
-    me {
-        id
-        email
-        role
+  me {
+    id
+    email
+    role
+    avatarUrl
+    profile {
+      fullName
     }
+  }
 }
